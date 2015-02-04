@@ -146,7 +146,7 @@ namespace ConsoleApplication7
             //form the insertion queries for the bond type in the same manner or call the stored procedures as per required
 
             //string[] allData = System.IO.File.ReadAllLines(@"C:\Users\ashikumar\Downloads\Data for securities.csv");
-            string[] allData = System.IO.File.ReadAllLines(@"E:\Indus Valley Partners\SecurityMaster\Data for securities.csv");
+            string[] allData = System.IO.File.ReadAllLines(@"C:\Users\ashikumar\Downloads\Data for securities.csv");
             string attributeHeadersUnseperated = allData[0];
             string[] attributeHeadersSeperated = attributeHeadersUnseperated.Split('|');
 
@@ -204,24 +204,24 @@ namespace ConsoleApplication7
 
             Console.WriteLine("\n\n");  
             
-            OleDbConnection con;
-            DataSet ds;
-            OleDbDataAdapter adapter;
-            con = new OleDbConnection(@"provider=Microsoft.Jet.OLEDB.4.0;Data Source='E:\Indus Valley Partners\SecurityMaster\Data for securities.xlsx';Extended Properties=Excel 8.0;");
-            adapter = new OleDbDataAdapter("select * from [Equities$]", con);
-            adapter.TableMappings.Add("Table", "TestTable");
-            ds = new DataSet();
-            adapter.Fill(ds);
-            DataTable dt = ds.Tables[0];
+            //OleDbConnection con;
+            //DataSet ds;
+            //OleDbDataAdapter adapter;
+            //con = new OleDbConnection(@"provider=Microsoft.Jet.OLEDB.4.0;Data Source='E:\Indus Valley Partners\SecurityMaster\Data for securities.xlsx';Extended Properties=Excel 8.0;");
+            //adapter = new OleDbDataAdapter("select * from [Equities$]", con);
+            //adapter.TableMappings.Add("Table", "TestTable");
+            //ds = new DataSet();
+            //adapter.Fill(ds);
+            //DataTable dt = ds.Tables[0];
             
             
 
-            DataRow drxls = ds.Tables[0].Rows[0];
-            Console.WriteLine(ds.Tables[0].Rows[0].ToString());
+            //DataRow drxls = ds.Tables[0].Rows[0];
+            //Console.WriteLine(ds.Tables[0].Rows[0].ToString());
             
 
 
-            con.Close();
+            //con.Close();
 
 
 
