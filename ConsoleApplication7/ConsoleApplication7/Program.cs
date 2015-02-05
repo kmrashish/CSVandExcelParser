@@ -6,6 +6,7 @@ using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.OleDb;
+using System.Diagnostics;
 
 namespace ConsoleApplication7
 {
@@ -170,6 +171,8 @@ namespace ConsoleApplication7
             Console.WriteLine(queryHeadersPart);
             Console.WriteLine();
 
+            
+
             string newString = "";
             int p = 0;
             int i = 0;
@@ -199,29 +202,60 @@ namespace ConsoleApplication7
                 Console.WriteLine();
                 Console.WriteLine();
 
+                //query = @"exec "+proc_name+" "+parameterString+"";
+
+
                 //SqlCommand spcmd = new SqlCommand("exec stored_proc ");
             }            
 
-            Console.WriteLine("\n\n");  
-            
-            //OleDbConnection con;
+            Console.WriteLine("\n\n");
+            //Console.WriteLine("At last the content for newString is: "+newString);
+
+
+
+            try
+            {
+                string connectionstring = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123";
+                SqlConnection con = new SqlConnection(connectionstring);
+                con.Open();
+                string query = "exec eq.sp_ivp_securityMaster_iudfull_security @action='INSERT'," + newString;
+                SqlCommand cmd = new SqlCommand(query, con);
+                Console.WriteLine(con.State);
+                int noOfRowsAffected = cmd.ExecuteNonQuery();
+                Debug.WriteLine(newString);
+                con.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                //close the connection here
+            }
+
+
+
+
+
+            //OleDbConnection con2;
             //DataSet ds;
             //OleDbDataAdapter adapter;
-            //con = new OleDbConnection(@"provider=Microsoft.Jet.OLEDB.4.0;Data Source='E:\Indus Valley Partners\SecurityMaster\Data for securities.xlsx';Extended Properties=Excel 8.0;");
-            //adapter = new OleDbDataAdapter("select * from [Equities$]", con);
+            //con2 = new OleDbConnection(@"provider=Microsoft.Jet.OLEDB.4.0;Data Source='C:\Users\ashikumar\Downloads\Data for securities.xlsx';Extended Properties=Excel 8.0;");
+            //adapter = new OleDbDataAdapter("select * from [Equities$]", con2);
             //adapter.TableMappings.Add("Table", "TestTable");
             //ds = new DataSet();
             //adapter.Fill(ds);
             //DataTable dt = ds.Tables[0];
-            
-            
+
+
 
             //DataRow drxls = ds.Tables[0].Rows[0];
             //Console.WriteLine(ds.Tables[0].Rows[0].ToString());
-            
 
 
-            //con.Close();
+
+            //con2.Close();
 
 
 
