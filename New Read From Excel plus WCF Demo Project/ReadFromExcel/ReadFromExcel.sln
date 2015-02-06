@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadFromExcel", "ReadFromExcel\ReadFromExcel.csproj", "{77EE53D4-12FC-4918-B5F3-4C4216E2A70E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77EE53D4-12FC-4918-B5F3-4C4216E2A70E}.Debug|x86.ActiveCfg = Debug|x86
+		{77EE53D4-12FC-4918-B5F3-4C4216E2A70E}.Debug|x86.Build.0 = Debug|x86
+		{77EE53D4-12FC-4918-B5F3-4C4216E2A70E}.Release|x86.ActiveCfg = Release|x86
+		{77EE53D4-12FC-4918-B5F3-4C4216E2A70E}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
