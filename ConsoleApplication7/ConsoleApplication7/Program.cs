@@ -27,7 +27,7 @@ namespace ConsoleApplication7
             equityHashTable.Add("Bloomberg Ticker", "bloomberg_ticker");
             equityHashTable.Add("Bloomberg Unique ID", "bloomberg_unique_id");
             equityHashTable.Add("BBG Global ID", "bloomberg_global_id");
-            equityHashTable.Add("Ticker and Exchange", "bloombert_ticker_and_exchange");
+            equityHashTable.Add("Ticker and Exchange", "bloomberg_ticker_and_exchange");
             equityHashTable.Add("Is ADR Flag", "is_adr");
             equityHashTable.Add("ADR Underlying Ticker", "adr_underlying_ticker");
             equityHashTable.Add("ADR Underlying Currency", "adr_underlying_currency");
@@ -78,6 +78,14 @@ namespace ConsoleApplication7
             equityHashTable.Add("Frequency", "frequency");
             equityHashTable.Add("Dividend Type", "dividend_type");
 
+
+            Hashtable EquityReverseHashTable = new Hashtable();
+            foreach (DictionaryEntry entry in equityHashTable)
+                EquityReverseHashTable.Add(entry.Value, entry.Key);
+
+            Console.WriteLine(EquityReverseHashTable["dividend_type"].ToString());
+            Console.Read();
+
             Hashtable bondHashTable = new Hashtable();
             bondHashTable.Add("Security Description", "security_description");
             bondHashTable.Add("Security Name", "security_name");
@@ -90,172 +98,178 @@ namespace ConsoleApplication7
             bondHashTable.Add("BBG Unique ID", "bloomberg_unique_id");
             bondHashTable.Add("CUSIP", "cusip");
             bondHashTable.Add("SEDOL", "sedol");
-            bondHashTable.Add("Cap", "bloomberg_global_id");
-            bondHashTable.Add("Floor", "bloombert_ticker_and_exchange");
-            bondHashTable.Add("Coupon Frequency", "is_adr");
-            bondHashTable.Add("Coupon", "adr_underlying_ticker");
-            bondHashTable.Add("Coupon Type", "adr_underlying_currency");
-            bondHashTable.Add("Spread", "shares_per_adr");
-            bondHashTable.Add("Callable Flag", "ipo_date");
-            bondHashTable.Add("Fix to Float Flag", "price_currency");
-            bondHashTable.Add("Putable Flag", "settle_days");
-            bondHashTable.Add("Issue Date", "shares_outstanding");
-            bondHashTable.Add("Last Reset Date", "voting_rights_per_share");
-            bondHashTable.Add("Maturity", "twenty_day_average_volume");
-            bondHashTable.Add("Call Notification Max Days", "beta");
-            bondHashTable.Add("Put Notification Max Days", "short_interest");
-            bondHashTable.Add("Penultimate Coupon Date", "ytd_return");
-            bondHashTable.Add("Reset Frequency", "ninty_day_price_volatility");
-            bondHashTable.Add("Has Position", "form_pf_asset_class");
-            bondHashTable.Add("Macaulay Duration", "form_pf_country");
-            bondHashTable.Add("30D Volatility", "form_pf_credit_rating");
-            bondHashTable.Add("90D Volatility", "form_pf_currency");
-            bondHashTable.Add("30D Average Volume","form_pf_instrument");
-            bondHashTable.Add("PF Asset Class", "form_pf_liquid_profile");
-            bondHashTable.Add("PF Country", "form_pf_maturity");
-            bondHashTable.Add("PF Credit Rating", "form_pf_naics_code");
-            bondHashTable.Add("PF Currency", "form_pf_region");
-            bondHashTable.Add("PF Instrument", "form_pf_sector");
-            bondHashTable.Add("PF Liquidity Profile", "form_pf_sub_asset_class");
-            bondHashTable.Add("PF Maturity", "issue_country");
-            bondHashTable.Add("PF NAICS Code", "exchange");
-            bondHashTable.Add("PF Region", "issuer");
-            bondHashTable.Add("PF Sector", "issue_currency");
-            bondHashTable.Add("PF Sub Asset Class", "trading_currency");
-            bondHashTable.Add("Bloomberg Industry Group", "bloomberg_industry_sub_group");
-            bondHashTable.Add("Bloomberg Industry Sub Group", "bloomberg_industry_group");
+            bondHashTable.Add("First Coupon Date", "first_coupon_date");
+            bondHashTable.Add("Cap", "coupon_cap");
+            bondHashTable.Add("Floor", "coupon_floor");
+            bondHashTable.Add("Coupon Frequency", "coupon_frequency");
+            bondHashTable.Add("Coupon", "coupon_rate");
+            bondHashTable.Add("Coupon Type", "coupon_type");
+            bondHashTable.Add("Spread", "float_spread");
+            bondHashTable.Add("Callable Flag", "is_callable");
+            bondHashTable.Add("Fix to Float Flag", "is_fix_to_float");
+            bondHashTable.Add("Putable Flag", "is_putable");
+            bondHashTable.Add("Issue Date", "issue_date");
+            bondHashTable.Add("Last Reset Date", "last_reset_date");
+            bondHashTable.Add("Maturity", "maturity_date");
+            bondHashTable.Add("Call Notification Max Days", "maximum_call_notice_days");
+            bondHashTable.Add("Put Notification Max Days", "maximum_put_notifice_days");
+            bondHashTable.Add("Penultimate Coupon Date", "penultimate_coupon_date");
+            bondHashTable.Add("Reset Frequency", "reset_frequency");
+            bondHashTable.Add("Has Position", "has_position");
+            bondHashTable.Add("Macaulay Duration", "duration");
+            bondHashTable.Add("30D Volatility", "volatility_thirtyD");
+            bondHashTable.Add("90D Volatility", "volatility_nintyD");
+            bondHashTable.Add("Convexity", "convexity");
+            bondHashTable.Add("30D Average Volume", "average_volume_thirtyD");
+            bondHashTable.Add("PF Asset Class", "form_pf_asset_class");
+            bondHashTable.Add("PF Country", "form_pf_country");
+            bondHashTable.Add("PF Credit Rating", "form_pf_credit_rating");
+            bondHashTable.Add("PF Currency", "form_pf_currency");
+            bondHashTable.Add("PF Instrument", "form_pf_instrument");
+            bondHashTable.Add("PF Liquidity Profile", "form_pf_liquidity_profile");
+            bondHashTable.Add("PF Maturity", "form_pf_maturity");
+            bondHashTable.Add("PF NAICS Code", "form_pf_naics_code");
+            bondHashTable.Add("PF Region", "form_pf_region");
+            bondHashTable.Add("PF Sector", "form_pf_sector");
+            bondHashTable.Add("PF Sub Asset Class", "form_pf_sub_asset_class");
+            bondHashTable.Add("Bloomberg Industry Group", "bloomberg_industry_group");
+            bondHashTable.Add("Bloomberg Industry Sub Group", "bloomberg_industry_sub_group");
             bondHashTable.Add("Bloomberg Industry Sector", "bloomberg_industry_sector");
             bondHashTable.Add("Country of Issuance", "country_of_incorporation");
-            bondHashTable.Add("Issue Currency", "risk_currency");
-            bondHashTable.Add("Issuer", "open_price");
-            bondHashTable.Add("Risk Currency", "risk_currenty");
-            bondHashTable.Add("Put Date", "volume");
-            bondHashTable.Add("Put Price", "last_price");
+            bondHashTable.Add("Issue Currency", "issue_currency");
+            bondHashTable.Add("Issuer", "issuer");
+            bondHashTable.Add("Risk Currency", "risk_currency");
+            bondHashTable.Add("Put Date", "put_date");
+            bondHashTable.Add("Put Price", "put_price");
             bondHashTable.Add("Ask Price", "ask_price");
-            bondHashTable.Add("High Price", "bid_price");
-            bondHashTable.Add("Low Price", "pe_ratio");
-            bondHashTable.Add("Open Price", "declared_date");
-            bondHashTable.Add("Volume", "ex_date");
-            bondHashTable.Add("Bid Price", "record_date");
-            bondHashTable.Add("Last Price", "pay_date");
-            bondHashTable.Add("Call Date", "amount");
-            bondHashTable.Add("Call Price", "frequency");
+            bondHashTable.Add("High Price", "high_price");
+            bondHashTable.Add("Low Price", "low_price");
+            bondHashTable.Add("Open Price", "open_price");
+            bondHashTable.Add("Volume", "volume");
+            bondHashTable.Add("Bid Price", "bid_price");
+            bondHashTable.Add("Last Price", "last_price");
+            bondHashTable.Add("Call Date", "call_date");
+            bondHashTable.Add("Call Price", "call_price");
 
-            //Hashtable bondHashTable = new Hashtable();
-            //bondHashTable.Add();
-            //similarily form the hashtable for the mapping of the bond file field names and the column names in the database tables
-            //form the insertion queries for the bond type in the same manner or call the stored procedures as per required
+            Hashtable BondReverseHashTable = new Hashtable();
+            foreach (DictionaryEntry entry in equityHashTable)
+                BondReverseHashTable.Add(entry.Value, entry.Key);
 
+            ////Hashtable bondHashTable = new Hashtable();
+            ////bondHashTable.Add();
+            ////similarily form the hashtable for the mapping of the bond file field names and the column names in the database tables
+            ////form the insertion queries for the bond type in the same manner or call the stored procedures as per required
+
+            ////string[] allData = System.IO.File.ReadAllLines(@"C:\Users\ashikumar\Downloads\Data for securities.csv");
             //string[] allData = System.IO.File.ReadAllLines(@"C:\Users\ashikumar\Downloads\Data for securities.csv");
-            string[] allData = System.IO.File.ReadAllLines(@"C:\Users\ashikumar\Downloads\Data for securities.csv");
-            string attributeHeadersUnseperated = allData[0];
-            string[] attributeHeadersSeperated = attributeHeadersUnseperated.Split('|');
+            //string attributeHeadersUnseperated = allData[0];
+            //string[] attributeHeadersSeperated = attributeHeadersUnseperated.Split('|');
 
-            string queryHeadersPart = string.Empty;
+            //string queryHeadersPart = string.Empty;
 
-            string[] attributes=new string[100];
-            string[] data=new string[100];
+            //string[] attributes=new string[100];
+            //string[] data=new string[100];
 
-            int x = 0;
+            //int x = 0;
 
-            foreach (string s in attributeHeadersSeperated)
-            {
-                Console.Write(s);                                 
-                queryHeadersPart += equityHashTable[s] + ","; attributes[x] = s;
-                x++;
-            }
-            queryHeadersPart = queryHeadersPart.Remove(0, 1);
-            queryHeadersPart = queryHeadersPart.Substring(0, queryHeadersPart.LastIndexOf(','));
+            //foreach (string s in attributeHeadersSeperated)
+            //{
+            //    Console.Write(s);                                 
+            //    queryHeadersPart += equityHashTable[s] + ","; attributes[x] = s;
+            //    x++;
+            //}
+            //queryHeadersPart = queryHeadersPart.Remove(0, 1);
+            //queryHeadersPart = queryHeadersPart.Substring(0, queryHeadersPart.LastIndexOf(','));
             
-            Console.WriteLine("\n");
-            Console.WriteLine(queryHeadersPart);
-            Console.WriteLine();
+            //Console.WriteLine("\n");
+            //Console.WriteLine(queryHeadersPart);
+            //Console.WriteLine();
 
             
 
-            string newString = "";
-            int p = 0;
-            int i = 0;
-            for (i = 1; i < allData.Length; i++)
-            {
+            //string newString = "";
+            //int p = 0;
+            //int i = 0;
+            //for (i = 1; i < allData.Length; i++)
+            //{
 
-                string queryValues = string.Empty;
-                string dataRowUnseperated = allData[i];
-                string[] dataRowSeperated = dataRowUnseperated.Split('|');
+            //    string queryValues = string.Empty;
+            //    string dataRowUnseperated = allData[i];
+            //    string[] dataRowSeperated = dataRowUnseperated.Split('|');
 
-                p = 0;
-                foreach (string dr in dataRowSeperated)
-                {
-                    //Console.WriteLine(dr);
-                    data[p] = dr; p++;
-                }
+            //    p = 0;
+            //    foreach (string dr in dataRowSeperated)
+            //    {
+            //        //Console.WriteLine(dr);
+            //        data[p] = dr; p++;
+            //    }
 
-                newString = "";
-                int t = 0;
-                for (t = 1; t <= x; t++)
-                {
-                    if (data[t] != null)
-                        newString += "@" + equityHashTable[attributes[t]] + "='" + data[t] + "', ";
-                }
-                newString = newString.Substring(0, newString.LastIndexOf(','));
-                Console.WriteLine(newString);
-                Console.WriteLine();
-                Console.WriteLine();
+            //    newString = "";
+            //    int t = 0;
+            //    for (t = 1; t <= x; t++)
+            //    {
+            //        if (data[t] != null)
+            //            newString += "@" + equityHashTable[attributes[t]] + "='" + data[t] + "', ";
+            //    }
+            //    newString = newString.Substring(0, newString.LastIndexOf(','));
+            //    Console.WriteLine(newString);
+            //    Console.WriteLine();
+            //    Console.WriteLine();
 
-                //query = @"exec "+proc_name+" "+parameterString+"";
-
-
-                //SqlCommand spcmd = new SqlCommand("exec stored_proc ");
-            }            
-
-            Console.WriteLine("\n\n");
-            //Console.WriteLine("At last the content for newString is: "+newString);
+            //    //query = @"exec "+proc_name+" "+parameterString+"";
 
 
+            //    //SqlCommand spcmd = new SqlCommand("exec stored_proc ");
+            //}            
 
-            try
-            {
-                string connectionstring = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123";
-                SqlConnection con = new SqlConnection(connectionstring);
-                con.Open();
-                string query = "exec eq.sp_ivp_securityMaster_iudfull_security @action='INSERT'," + newString;
-                SqlCommand cmd = new SqlCommand(query, con);
-                Console.WriteLine(con.State);
-                int noOfRowsAffected = cmd.ExecuteNonQuery();
-                Debug.WriteLine(newString);
-                con.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                //close the connection here
-            }
+            //Console.WriteLine("\n\n");
+            ////Console.WriteLine("At last the content for newString is: "+newString);
 
 
 
+            //try
+            //{
+            //    string connectionstring = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123";
+            //    SqlConnection con = new SqlConnection(connectionstring);
+            //    con.Open();
+            //    string query = "exec eq.sp_ivp_securityMaster_iudfull_security @action='INSERT'," + newString;
+            //    SqlCommand cmd = new SqlCommand(query, con);
+            //    Console.WriteLine(con.State);
+            //    int noOfRowsAffected = cmd.ExecuteNonQuery();
+            //    Debug.WriteLine(newString);
+            //    con.Close();
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //}
+            //finally
+            //{
+            //    //close the connection here
+            //}
 
 
-            //OleDbConnection con2;
-            //DataSet ds;
-            //OleDbDataAdapter adapter;
-            //con2 = new OleDbConnection(@"provider=Microsoft.Jet.OLEDB.4.0;Data Source='C:\Users\ashikumar\Downloads\Data for securities.xlsx';Extended Properties=Excel 8.0;");
-            //adapter = new OleDbDataAdapter("select * from [Equities$]", con2);
-            //adapter.TableMappings.Add("Table", "TestTable");
-            //ds = new DataSet();
-            //adapter.Fill(ds);
-            //DataTable dt = ds.Tables[0];
 
 
 
-            //DataRow drxls = ds.Tables[0].Rows[0];
-            //Console.WriteLine(ds.Tables[0].Rows[0].ToString());
+            ////OleDbConnection con2;
+            ////DataSet ds;
+            ////OleDbDataAdapter adapter;
+            ////con2 = new OleDbConnection(@"provider=Microsoft.Jet.OLEDB.4.0;Data Source='C:\Users\ashikumar\Downloads\Data for securities.xlsx';Extended Properties=Excel 8.0;");
+            ////adapter = new OleDbDataAdapter("select * from [Equities$]", con2);
+            ////adapter.TableMappings.Add("Table", "TestTable");
+            ////ds = new DataSet();
+            ////adapter.Fill(ds);
+            ////DataTable dt = ds.Tables[0];
 
 
 
-            //con2.Close();
+            ////DataRow drxls = ds.Tables[0].Rows[0];
+            ////Console.WriteLine(ds.Tables[0].Rows[0].ToString());
+
+
+
+            ////con2.Close();
 
 
 
