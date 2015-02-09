@@ -34,10 +34,9 @@ sectype_name nvarchar(100) not null unique,
 sectype_description nvarchar(255) not null unique,
 created_by nvarchar(50) not null,
 created_on date,
-last_modified_by nvarchar(50),
+last_modified_by date,
 last_modified_on date,
 );
-
 go
 
 --select * from core.ivp_securityMaster_core_sectype_id
@@ -113,7 +112,7 @@ drop table core.ivp_securityMaster_core_referencedata;
 
 go
 create table core.ivp_securityMaster_core_referencedata(
-code bigint primary key identity foreign key references core.ivp_securityMaster_core_securityidentifier(code),
+code bigint primary key,
 sectype int,
 issue_country nvarchar(100),
 exchange nvarchar(100),
@@ -138,7 +137,7 @@ drop table eq.ivp_securityMaster_securitysummary;
 go
 
 create table eq.ivp_securityMaster_securitysummary(
-code bigint primary key identity foreign key references core.ivp_securityMaster_core_securityidentifier(code),
+code bigint primary key identity,
 security_name nvarchar(255) not null,
 security_description nvarchar(255),
 has_position varchar(4),
@@ -157,7 +156,7 @@ drop table eq.ivp_securityMaster_securitydetails;
 go
 
 create table eq.ivp_securityMaster_securitydetails(
-code bigint primary key identity foreign key references core.ivp_securityMaster_core_securityidentifier(code),
+code bigint primary key identity foreign key references eq.ivp_securityMaster_securitysummary(code),
 is_adr varchar(max),
 adr_underlying_ticker nvarchar(100),
 adr_underlying_currency nvarchar(100),
@@ -188,7 +187,7 @@ drop table eq.ivp_securityMaster_risk;
 go
 
 create table eq.ivp_securityMaster_risk(
-code bigint primary key identity foreign key references core.ivp_securityMaster_core_securityidentifier(code),
+code bigint primary key identity foreign key references eq.ivp_securityMaster_securitysummary(code),
 twenty_day_average_volume nvarchar(100),
 beta nvarchar(100),
 short_interest nvarchar(100),
@@ -204,7 +203,7 @@ drop table eq.ivp_securityMaster_pricingdetails;
 go
 
 create table eq.ivp_securityMaster_pricingdetails(
-code bigint primary key identity foreign key references core.ivp_securityMaster_core_securityidentifier(code),
+code bigint primary key identity,
 open_price varchar(max),
 close_price varchar(max),
 volume bigint,
@@ -222,16 +221,20 @@ drop table eq.ivp_securityMaster_dividendhistory;
 go
 
 create table eq.ivp_securityMaster_dividendhistory(
-code bigint primary key identity foreign key references core.ivp_securityMaster_core_securityidentifier(code),
+code bigint primary key identity,
 declared_date date,
-ex_date varchar(max),
-record_date varchar(max),
-pay_date varchar(max),
+ex_date date,
+record_date date,
+pay_date date,
 amount varchar(max),
 frequency nvarchar(100),
 dividend_type nvarchar(100)
 )
+go
+select * from eq.ivp_securityMaster_dividendhistory
 
+
+use MCA2015
 /***************Corporate Bond**********************/
 
 go

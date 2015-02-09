@@ -26,9 +26,10 @@ namespace ReadFromExcel
     }
     public class myForm : Form
     {
-        public string DestinationConnectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
-        public string SourceConnectionString = @"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\Ashu\Documents\Visual Studio 2012\Projects\SecMasterVersionTwo\SecMasterAlphaTwo\New Data\Data for securities.xlsx';Extended Properties='Excel 12.0;IMEX=1'";
-        //string ActualConnectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
+        //public string DestinationConnectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
+        //public string SourceConnectionString = @"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\Ashu\Documents\Visual Studio 2012\Projects\SecMasterVersionTwo\SecMasterAlphaTwo\New Data\Data for securities.xlsx';Extended Properties='Excel 12.0;IMEX=1'";
+        string DestinationConnectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
+        string SourceConnectionString=@"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\ashikumar\Downloads\Data for securities.xlsx';Extended Properties='Excel 12.0;IMEX=1'";
            
         public myForm()
             : base()
@@ -180,21 +181,23 @@ namespace ReadFromExcel
                 
             
        
-            ///establish the OLEDB connection and fetch the contents from the equity file into a dataset (ds here)
-            //OleDbConnection con;
-            //DataSet ds;
-            //OleDbDataAdapter adapter;
-            ////con = new OleDbConnection(@"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\ashikumar\Downloads\Equity File.xls';Extended Properties='Excel 12.0;IMEX=1'");
-            //con = new OleDbConnection(SourceConnectionString);
-            //adapter = new OleDbDataAdapter("select * from [Equities$]", con);
-            //adapter.TableMappings.Add("Table", "TestTable");
-            //ds = new DataSet();
-            //adapter.Fill(ds);
-            //con.Close();
+            //establish the OLEDB connection and fetch the contents from the equity file into a dataset (ds here)
+            OleDbConnection con;
+            DataSet ds;
+            OleDbDataAdapter adapter;
+            //con = new OleDbConnection(@"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\ashikumar\Downloads\Equity File.xls';Extended Properties='Excel 12.0;IMEX=1'");
+            con = new OleDbConnection(SourceConnectionString);
+            adapter = new OleDbDataAdapter("select * from [Equities$]", con);
+            adapter.TableMappings.Add("Table", "TestTable");
+            ds = new DataSet();
+            adapter.Fill(ds);
+            con.Close();
+
+            DataTable dsn = new DataTable();
+            dsn = ds.Tables[0].Rows.Cast<DataRow>().Where(row => !row.ItemArray.All(field => field is System.DBNull || string.Compare((field as string).Trim(), string.Empty) == 0)).CopyToDataTable();
 
             //string[] fields = { "CUSIP", "ISIN", "SEDOL", "Bloomberg Ticker", "Bloomberg Unique ID", "BBG Global ID", "Ticker and Exchange" };
-            //DataTable security_identifier_datatable = ds.Tables[0].DefaultView.ToTable(false, fields);
-            //security_identifier_datatable = security_identifier_datatable.Rows.Cast<DataRow>().Where(row => !row.ItemArray.All(field => field is System.DBNull || string.Compare((field as string).Trim(), string.Empty) == 0)).CopyToDataTable();
+            //DataTable security_identifier_datatable = dsn.DefaultView.ToTable(false, fields);
             //DataColumn sectype = new DataColumn("Security Type");
             //sectype.DefaultValue = 1;
             //security_identifier_datatable.Columns.Add(sectype);
@@ -203,8 +206,7 @@ namespace ReadFromExcel
 
 
             //string[] refFields = { "Country of Issuance", "Exchange", "Issuer", "Issue Currency", "Trading Currency", "BBG Industry Sub Group", "Bloomberg Industry Group", "Bloomberg Sector", "Country of Incorporation", "Risk Currency" };
-            //DataTable security_referencedata_datatable = ds.Tables[0].DefaultView.ToTable(false, refFields);
-            //security_referencedata_datatable = security_referencedata_datatable.Rows.Cast<DataRow>().Where(row => !row.ItemArray.All(field => field is System.DBNull || string.Compare((field as string).Trim(), string.Empty) == 0)).CopyToDataTable();
+            //DataTable security_referencedata_datatable = dsn.DefaultView.ToTable(false, refFields);
             //DataColumn sectypeInReference = new DataColumn("Security Type");
             //sectypeInReference.DefaultValue = 1;
             //security_referencedata_datatable.Columns.Add(sectypeInReference);
@@ -212,41 +214,38 @@ namespace ReadFromExcel
             //WriteToTable(security_referencedata_datatable, "core.ivp_securityMaster_core_referencedata", refFields, equityHashTable);
 
             //string[] EquitySummaryFields = { "Security Name", "Security Description", "Has Position", "Is Active Security", "Lot Size", "BBG Unique Name" };
-            //DataTable Equity_summary_datatable = ds.Tables[0].DefaultView.ToTable(false, EquitySummaryFields);
-            //Equity_summary_datatable = Equity_summary_datatable.Rows.Cast<DataRow>().Where(row => !row.ItemArray.All(field => field is System.DBNull || string.Compare((field as string).Trim(), string.Empty) == 0)).CopyToDataTable();
+            //DataTable Equity_summary_datatable = dsn.DefaultView.ToTable(false, EquitySummaryFields);
             //WriteToTable(Equity_summary_datatable, "eq.ivp_securityMaster_securitysummary", EquitySummaryFields, equityHashTable);
 
             //string[] EquityDetailsFields = { "Is ADR Flag", "ADR Underlying Ticker", "ADR Underlying Currency", "Shares Per ADR", "IPO Date", "Pricing Currency", "Settle Days", "Total Shares Outstanding", "Voting Rights Per Share", "PF Asset Class", "PF Country", "PF Credit Rating", "PF Currency", "PF Instrument", "PF Liquidity Profile", "PF Maturity", "PF NAICS Code", "PF Region", "PF Sector", "PF Sub Asset Class" };
-            //DataTable Equity_details_datatable = ds.Tables[0].DefaultView.ToTable(false, EquityDetailsFields);
-            //Equity_details_datatable = Equity_details_datatable.Rows.Cast<DataRow>().Where(row => !row.ItemArray.All(field => field is System.DBNull || string.Compare((field as string).Trim(), string.Empty) == 0)).CopyToDataTable();
+            //DataTable Equity_details_datatable = dsn.DefaultView.ToTable(false, EquityDetailsFields);
             //WriteToTable(Equity_details_datatable, "eq.ivp_securityMaster_securitydetails", EquityDetailsFields, equityHashTable);
 
             //string[] EquityRiskFields = { "Average Volume - 20D", "Beta", "Short Interest", "Return - YTD", "Volatility - 90D" };
-            //DataTable Equity_risk_datatable = ds.Tables[0].DefaultView.ToTable(false, EquityRiskFields);
-            ////Equity_risk_datatable = Equity_risk_datatable.Rows.Cast<DataRow>().Where(row => !row.ItemArray.All(field => field is System.DBNull || string.Compare((field as string).Trim(), string.Empty) == 0)).CopyToDataTable();
+            //DataTable Equity_risk_datatable = dsn.DefaultView.ToTable(false, EquityRiskFields);
             //WriteToTable(Equity_risk_datatable, "eq.ivp_securityMaster_risk", EquityRiskFields, equityHashTable);
 
             //string[] EquityPricingDetailsFields = { "Open Price", "Close Price", "Volume", "Last Price", "Ask Price", "Bid Price","PE Ratio"};
-            //DataTable Equity_pricing_details_datatable = ds.Tables[0].DefaultView.ToTable(false, EquityPricingDetailsFields);
+            //DataTable Equity_pricing_details_datatable = dsn.DefaultView.ToTable(false, EquityPricingDetailsFields);
             //WriteToTable(Equity_pricing_details_datatable, "eq.ivp_securityMaster_pricingdetails", EquityPricingDetailsFields, equityHashTable);
 
-            //string[] EquityDividendHistoryFields = { "Dividend Declared Date", "Dividend Ex Date", "Dividend Record Date ", "Dividend Pay Date", "Dividend Amount", "Frequency", "Dividend Type" };
-            //DataTable Equity_dividend_history_datatable = ds.Tables[0].DefaultView.ToTable(false, EquityDividendHistoryFields);
-            //WriteToTable(Equity_dividend_history_datatable, "eq.ivp_securityMaster_dividendhistory", EquityDividendHistoryFields, equityHashTable);
+            string[] EquityDividendHistoryFields = { "Dividend Declared Date", "Dividend Ex Date", "Dividend Record Date ", "Dividend Pay Date", "Dividend Amount", "Frequency", "Dividend Type" };
+            DataTable Equity_dividend_history_datatable = dsn.DefaultView.ToTable(false, EquityDividendHistoryFields);
+            WriteToTable(Equity_dividend_history_datatable, "eq.ivp_securityMaster_dividendhistory", EquityDividendHistoryFields, equityHashTable);
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////
             //parsing the bond file and sending it to the database tables//
 
-            OleDbConnection conB;
-            DataSet dsB;
-            OleDbDataAdapter adapterB;
-            //con = new OleDbConnection(@"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\ashikumar\Downloads\Equity File.xls';Extended Properties='Excel 12.0;IMEX=1'");
-            conB = new OleDbConnection(SourceConnectionString);
-            adapterB = new OleDbDataAdapter("select * from [Bonds$]", conB);
-            adapterB.TableMappings.Add("TableB", "TestTableB");
-            dsB = new DataSet();
-            adapterB.Fill(dsB);
-            conB.Close();
+            //OleDbConnection conB;
+            //DataSet dsB;
+            //OleDbDataAdapter adapterB;
+            ////con = new OleDbConnection(@"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\ashikumar\Downloads\Equity File.xls';Extended Properties='Excel 12.0;IMEX=1'");
+            //conB = new OleDbConnection(SourceConnectionString);
+            //adapterB = new OleDbDataAdapter("select * from [Bonds$]", conB);
+            //adapterB.TableMappings.Add("TableB", "TestTableB");
+            //dsB = new DataSet();
+            //adapterB.Fill(dsB);
+            //conB.Close();
 
             //string[] fieldsB = { "CUSIP", "ISIN", "SEDOL", "BBG Ticker", "BBG Unique ID"};
             //DataTable security_identifier_datatableB = dsB.Tables[0].DefaultView.ToTable(false, fieldsB);
@@ -266,14 +265,14 @@ namespace ReadFromExcel
             //sectypeInReferenceB.SetOrdinal(0);
             //WriteToTable(security_referencedata_datatableB, "core.ivp_securityMaster_core_referencedata", refFieldsB, bondHashTable);
 
-            string[] BondSummaryFields = { "Security Name", "Security Description", "Asset Type", "Investment Type", "Trading Factor", "Pricing Factor" };
-            DataTable Bond_summary_datatable = dsB.Tables[0].DefaultView.ToTable(false, BondSummaryFields);
-            Bond_summary_datatable = Bond_summary_datatable.Rows.Cast<DataRow>().Where(row => !row.ItemArray.All(field => field is System.DBNull || string.Compare((field as string).Trim(), string.Empty) == 0)).CopyToDataTable();
-            DataColumn sectypeInReferenceB = new DataColumn("Is Active");
-            sectypeInReferenceB.DefaultValue = "TRUE";
-            Bond_summary_datatable.Columns.Add(sectypeInReferenceB);
-            sectypeInReferenceB.SetOrdinal(0);
-            WriteToTable(Bond_summary_datatable, "cb.ivp_securityMaster_securitysummary", BondSummaryFields, bondHashTable);
+            //string[] BondSummaryFields = { "Security Name", "Security Description", "Asset Type", "Investment Type", "Trading Factor", "Pricing Factor" };
+            //DataTable Bond_summary_datatable = dsB.Tables[0].DefaultView.ToTable(false, BondSummaryFields);
+            //Bond_summary_datatable = Bond_summary_datatable.Rows.Cast<DataRow>().Where(row => !row.ItemArray.All(field => field is System.DBNull || string.Compare((field as string).Trim(), string.Empty) == 0)).CopyToDataTable();
+            //DataColumn sectypeInReferenceB = new DataColumn("Is Active");
+            //sectypeInReferenceB.DefaultValue = "TRUE";
+            //Bond_summary_datatable.Columns.Add(sectypeInReferenceB);
+            //sectypeInReferenceB.SetOrdinal(0);
+            //WriteToTable(Bond_summary_datatable, "cb.ivp_securityMaster_securitysummary", BondSummaryFields, bondHashTable);
 
 
 
@@ -314,8 +313,8 @@ namespace ReadFromExcel
 
         private int CountSecurities()
         {
-            //string connectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
-            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
+            string connectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
+            //string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
 
             SqlConnection conn = new SqlConnection(connectionString);
             int noOfSecuritiesNow = 0;
