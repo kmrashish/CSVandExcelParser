@@ -26,10 +26,10 @@ namespace ReadFromExcel
     }
     public class myForm : Form
     {
-        //public string DestinationConnectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
-        //public string SourceConnectionString = @"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\Ashu\Documents\Visual Studio 2012\Projects\SecMasterVersionTwo\SecMasterAlphaTwo\New Data\Data for securities.xlsx';Extended Properties='Excel 12.0;IMEX=1'";
-        string DestinationConnectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
-        string SourceConnectionString=@"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\ashikumar\Downloads\Data for securities.xlsx';Extended Properties='Excel 12.0;IMEX=1'";
+        public string DestinationConnectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
+        public string SourceConnectionString = @"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\Ashu\Documents\Visual Studio 2012\Projects\SecMasterVersionTwo\SecMasterAlphaTwo\New Data\Data for securities.xlsx';Extended Properties='Excel 12.0;IMEX=1'";
+        //string DestinationConnectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
+        //string SourceConnectionString=@"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\ashikumar\Downloads\Data for securities.xlsx';Extended Properties='Excel 12.0;IMEX=1'";
            
         public myForm()
             : base()
@@ -103,9 +103,9 @@ namespace ReadFromExcel
             equityHashTable.Add("Security Type", "1");
 
             
-            Hashtable EquityReverseHashTable = new Hashtable();            
-            foreach (DictionaryEntry entry in equityHashTable)
-                EquityReverseHashTable.Add(entry.Value, entry.Key);
+            //Hashtable EquityReverseHashTable = new Hashtable();            
+            //foreach (DictionaryEntry entry in equityHashTable)
+            //    EquityReverseHashTable.Add(entry.Value, entry.Key);
 
           
             Hashtable bondHashTable = new Hashtable();
@@ -174,9 +174,9 @@ namespace ReadFromExcel
             bondHashTable.Add("Call Price", "call_price");
             bondHashTable.Add("Security Type", "2");
 
-            Hashtable BondReverseHashTable = new Hashtable();
-            foreach (DictionaryEntry entry in equityHashTable)
-                BondReverseHashTable.Add(entry.Value, entry.Key);
+            //Hashtable BondReverseHashTable = new Hashtable();
+            //foreach (DictionaryEntry entry in equityHashTable)
+            //    BondReverseHashTable.Add(entry.Value, entry.Key);
             int noOfSecuritiesNow = CountSecurities();
                 
             
@@ -213,9 +213,14 @@ namespace ReadFromExcel
             //sectypeInReference.SetOrdinal(0);
             //WriteToTable(security_referencedata_datatable, "core.ivp_securityMaster_core_referencedata", refFields, equityHashTable);
 
-            //string[] EquitySummaryFields = { "Security Name", "Security Description", "Has Position", "Is Active Security", "Lot Size", "BBG Unique Name" };
-            //DataTable Equity_summary_datatable = dsn.DefaultView.ToTable(false, EquitySummaryFields);
-            //WriteToTable(Equity_summary_datatable, "eq.ivp_securityMaster_securitysummary", EquitySummaryFields, equityHashTable);
+            DataTable Equity_summary_datatable = new DataTable();
+            DataColumn fk_sec_id = Equity_summary_datatable.Columns.Add("Foreign Key", typeof(Int32));
+            fk_sec_id.AutoIncrement = true;
+            fk_sec_id.AutoIncrementSeed = noOfSecuritiesNow;
+            fk_sec_id.AutoIncrementStep = 1;
+            string[] EquitySummaryFields = { "Security Name", "Security Description", "Has Position", "Is Active Security", "Lot Size", "BBG Unique Name" };
+            Equity_summary_datatable = dsn.DefaultView.ToTable(false, EquitySummaryFields);
+            WriteToTable(Equity_summary_datatable, "eq.ivp_securityMaster_securitysummary", EquitySummaryFields, equityHashTable);
 
             //string[] EquityDetailsFields = { "Is ADR Flag", "ADR Underlying Ticker", "ADR Underlying Currency", "Shares Per ADR", "IPO Date", "Pricing Currency", "Settle Days", "Total Shares Outstanding", "Voting Rights Per Share", "PF Asset Class", "PF Country", "PF Credit Rating", "PF Currency", "PF Instrument", "PF Liquidity Profile", "PF Maturity", "PF NAICS Code", "PF Region", "PF Sector", "PF Sub Asset Class" };
             //DataTable Equity_details_datatable = dsn.DefaultView.ToTable(false, EquityDetailsFields);
@@ -311,10 +316,10 @@ namespace ReadFromExcel
             }
         }
 
-        private int CountSecurities()
+        protected int CountSecurities()
         {
-            string connectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
-            //string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
+            //string connectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
+            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
 
             SqlConnection conn = new SqlConnection(connectionString);
             int noOfSecuritiesNow = 0;
