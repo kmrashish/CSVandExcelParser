@@ -84,8 +84,7 @@ drop table core.ivp_securityMaster_core_securityidentifier;
 
 go
 create table core.ivp_securityMaster_core_securityidentifier(
-code bigint primary key identity,
---fk_security_id varchar(max),
+security_id bigint,
 sectype int,
 cusip nvarchar(100),
 isin nvarchar(100),
@@ -97,6 +96,7 @@ bloomberg_ticker_and_exchange varchar(max)
 )
 
 go
+
 use MCA2015
 select * from core.ivp_securityMaster_core_securityidentifier
 delete from core.ivp_securityMaster_core_securityidentifier

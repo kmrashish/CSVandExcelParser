@@ -26,10 +26,10 @@ namespace ReadFromExcel
     }
     public class myForm : Form
     {
-        public string DestinationConnectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
-        public string SourceConnectionString = @"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\Ashu\Documents\Visual Studio 2012\Projects\SecMasterVersionTwo\SecMasterAlphaTwo\New Data\Data for securities.xlsx';Extended Properties='Excel 12.0;IMEX=1'";
-        //string DestinationConnectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
-        //string SourceConnectionString=@"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\ashikumar\Downloads\Data for securities.xlsx';Extended Properties='Excel 12.0;IMEX=1'";
+        //public string DestinationConnectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
+        //public string SourceConnectionString = @"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\Ashu\Documents\Visual Studio 2012\Projects\SecMasterVersionTwo\SecMasterAlphaTwo\New Data\Data for securities.xlsx';Extended Properties='Excel 12.0;IMEX=1'";
+        public string DestinationConnectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
+        public string SourceConnectionString=@"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\ashikumar\Downloads\Bond File.xls';Extended Properties='Excel 12.0;IMEX=1'";
            
         public myForm()
             : base()
@@ -101,6 +101,7 @@ namespace ReadFromExcel
             equityHashTable.Add("Frequency", "frequency");
             equityHashTable.Add("Dividend Type", "dividend_type");
             equityHashTable.Add("Security Type", "1");
+            equityHashTable.Add("Security ID", "security_id");
 
             
             //Hashtable EquityReverseHashTable = new Hashtable();            
@@ -142,7 +143,7 @@ namespace ReadFromExcel
             bondHashTable.Add("30D Volatility", "volatility_thirtyD");
             bondHashTable.Add("90D Volatility", "volatility_nintyD");
             bondHashTable.Add("Convexity", "convexity");
-            bondHashTable.Add("30D Average Volume", "average_volume_thirtyD");
+            bondHashTable.Add("30Day Average Volume", "average_volume_thirtyD");
             bondHashTable.Add("PF Asset Class", "form_pf_asset_class");
             bondHashTable.Add("PF Country", "form_pf_country");
             bondHashTable.Add("PF Credit Rating", "form_pf_credit_rating");
@@ -172,14 +173,18 @@ namespace ReadFromExcel
             bondHashTable.Add("Last Price", "last_price");
             bondHashTable.Add("Call Date", "call_date");
             bondHashTable.Add("Call Price", "call_price");
-            bondHashTable.Add("Security Type", "2");
+            //bondHashTable.Add("Is Active", "is_active");
+            //bondHashTable.Add("Security Type", "sec_type");
 
-            //Hashtable BondReverseHashTable = new Hashtable();
-            //foreach (DictionaryEntry entry in equityHashTable)
-            //    BondReverseHashTable.Add(entry.Value, entry.Key);
-            int noOfSecuritiesNow = CountSecurities();
+            Hashtable BondReverseHashTable = new Hashtable();
+            foreach (DictionaryEntry entry in bondHashTable)
+                BondReverseHashTable.Add(entry.Value, entry.Key);
+
+            
+            
                 
             
+
        
             //establish the OLEDB connection and fetch the contents from the equity file into a dataset (ds here)
             OleDbConnection con;
@@ -187,56 +192,77 @@ namespace ReadFromExcel
             OleDbDataAdapter adapter;
             //con = new OleDbConnection(@"provider=Microsoft.ACE.OLEDB.12.0;Data Source='C:\Users\ashikumar\Downloads\Equity File.xls';Extended Properties='Excel 12.0;IMEX=1'");
             con = new OleDbConnection(SourceConnectionString);
-            adapter = new OleDbDataAdapter("select * from [Equities$]", con);
+            adapter = new OleDbDataAdapter("select * from [Bonds$]", con);
             adapter.TableMappings.Add("Table", "TestTable");
             ds = new DataSet();
             adapter.Fill(ds);
             con.Close();
 
+
             DataTable dsn = new DataTable();
             dsn = ds.Tables[0].Rows.Cast<DataRow>().Where(row => !row.ItemArray.All(field => field is System.DBNull || string.Compare((field as string).Trim(), string.Empty) == 0)).CopyToDataTable();
-
-            //string[] fields = { "CUSIP", "ISIN", "SEDOL", "Bloomberg Ticker", "Bloomberg Unique ID", "BBG Global ID", "Ticker and Exchange" };
-            //DataTable security_identifier_datatable = dsn.DefaultView.ToTable(false, fields);
-            //DataColumn sectype = new DataColumn("Security Type");
+                        
+            //string[] fields = { "CUSIP", "ISIN", "SEDOL", "Bloomberg Ticker", "Bloomberg Unique ID", "BBG Global ID", "Ticker and Exchange",
+            //                  "Country of Issuance", "Exchange", "Issuer", "Issue Currency", "Trading Currency", "BBG Industry Sub Group", "Bloomberg Industry Group", "Bloomberg Sector", "Country of Incorporation", "Risk Currency",
+            //                  "Security Name", "Security Description", "Has Position", "Is Active Security", "Lot Size", "BBG Unique Name",
+            //                  "Is ADR Flag", "ADR Underlying Ticker", "ADR Underlying Currency", "Shares Per ADR", "IPO Date", "Pricing Currency", "Settle Days", "Total Shares Outstanding", "Voting Rights Per Share", "PF Asset Class", "PF Country", "PF Credit Rating", "PF Currency", "PF Instrument", "PF Liquidity Profile", "PF Maturity", "PF NAICS Code", "PF Region", "PF Sector", "PF Sub Asset Class",
+            //                  "Average Volume - 20D", "Beta", "Short Interest", "Return - YTD", "Volatility - 90D",
+            //                  "Open Price", "Close Price", "Volume", "Last Price", "Ask Price", "Bid Price","PE Ratio",
+            //                  "Dividend Declared Date", "Dividend Ex Date", "Dividend Record Date ", "Dividend Pay Date", "Dividend Amount", "Frequency", "Dividend Type"
+            //                  };
+            
+            //DataTable equitydt = dsn.DefaultView.ToTable(false, fields);
+            //DataColumn sectype = new DataColumn("Security Type", typeof(Int32));
             //sectype.DefaultValue = 1;
-            //security_identifier_datatable.Columns.Add(sectype);
-            //sectype.SetOrdinal(0);
-            //WriteToTable(security_identifier_datatable, "core.ivp_securityMaster_core_securityidentifier", fields, equityHashTable);
+            //equitydt.Columns.Add(sectype);
+            ////sectype.SetOrdinal(0);
+            //DataColumn created_by = new DataColumn("Created by", typeof(String));
+            //created_by.DefaultValue = "User";
+            //equitydt.Columns.Add(created_by);
+            
+            //DataColumn created_on = new DataColumn("Created on", typeof(String));
+            //created_on.DefaultValue = "Today";
+            //equitydt.Columns.Add(created_on);
+
+            //DataColumn last_modified_by = new DataColumn("Last Modified by", typeof(String));
+            //last_modified_by.DefaultValue = "User";
+            //equitydt.Columns.Add(last_modified_by);
+
+            //DataColumn last_modified_on = new DataColumn("Last Modified On", typeof(String));
+            //last_modified_on.DefaultValue="Today";
+            //equitydt.Columns.Add(last_modified_on);
+            
+            //using (SqlConnection conn = new SqlConnection(DestinationConnectionString))
+            //{
+            //    conn.Open();
+            //    using (SqlBulkCopy sbc = new SqlBulkCopy(conn))
+            //    {
+            //        sbc.DestinationTableName = "dbo.ivp_secm_equity";
+            //        try
+            //        {
+            //            sbc.ColumnMappings.Add("Created by", "created_by");
+            //            sbc.ColumnMappings.Add("Created on", "created_on");
+            //            sbc.ColumnMappings.Add("Last Modified by", "last_modified_by");
+            //            sbc.ColumnMappings.Add("Last Modified On", "last_modified_on");
+
+            //            foreach (string f in fields)
+            //                sbc.ColumnMappings.Add(f.ToString(), equityHashTable[f.ToString()].ToString());
+
+            //            sbc.WriteToServer(equitydt);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Console.WriteLine(ex.Message);
+            //        }
+            //        finally
+            //        {
+            //            conn.Close();
+            //        }
+            //    }
+            //}
 
 
-            //string[] refFields = { "Country of Issuance", "Exchange", "Issuer", "Issue Currency", "Trading Currency", "BBG Industry Sub Group", "Bloomberg Industry Group", "Bloomberg Sector", "Country of Incorporation", "Risk Currency" };
-            //DataTable security_referencedata_datatable = dsn.DefaultView.ToTable(false, refFields);
-            //DataColumn sectypeInReference = new DataColumn("Security Type");
-            //sectypeInReference.DefaultValue = 1;
-            //security_referencedata_datatable.Columns.Add(sectypeInReference);
-            //sectypeInReference.SetOrdinal(0);
-            //WriteToTable(security_referencedata_datatable, "core.ivp_securityMaster_core_referencedata", refFields, equityHashTable);
-
-            DataTable Equity_summary_datatable = new DataTable();
-            DataColumn fk_sec_id = Equity_summary_datatable.Columns.Add("Foreign Key", typeof(Int32));
-            fk_sec_id.AutoIncrement = true;
-            fk_sec_id.AutoIncrementSeed = noOfSecuritiesNow;
-            fk_sec_id.AutoIncrementStep = 1;
-            string[] EquitySummaryFields = { "Security Name", "Security Description", "Has Position", "Is Active Security", "Lot Size", "BBG Unique Name" };
-            Equity_summary_datatable = dsn.DefaultView.ToTable(false, EquitySummaryFields);
-            WriteToTable(Equity_summary_datatable, "eq.ivp_securityMaster_securitysummary", EquitySummaryFields, equityHashTable);
-
-            //string[] EquityDetailsFields = { "Is ADR Flag", "ADR Underlying Ticker", "ADR Underlying Currency", "Shares Per ADR", "IPO Date", "Pricing Currency", "Settle Days", "Total Shares Outstanding", "Voting Rights Per Share", "PF Asset Class", "PF Country", "PF Credit Rating", "PF Currency", "PF Instrument", "PF Liquidity Profile", "PF Maturity", "PF NAICS Code", "PF Region", "PF Sector", "PF Sub Asset Class" };
-            //DataTable Equity_details_datatable = dsn.DefaultView.ToTable(false, EquityDetailsFields);
-            //WriteToTable(Equity_details_datatable, "eq.ivp_securityMaster_securitydetails", EquityDetailsFields, equityHashTable);
-
-            //string[] EquityRiskFields = { "Average Volume - 20D", "Beta", "Short Interest", "Return - YTD", "Volatility - 90D" };
-            //DataTable Equity_risk_datatable = dsn.DefaultView.ToTable(false, EquityRiskFields);
-            //WriteToTable(Equity_risk_datatable, "eq.ivp_securityMaster_risk", EquityRiskFields, equityHashTable);
-
-            //string[] EquityPricingDetailsFields = { "Open Price", "Close Price", "Volume", "Last Price", "Ask Price", "Bid Price","PE Ratio"};
-            //DataTable Equity_pricing_details_datatable = dsn.DefaultView.ToTable(false, EquityPricingDetailsFields);
-            //WriteToTable(Equity_pricing_details_datatable, "eq.ivp_securityMaster_pricingdetails", EquityPricingDetailsFields, equityHashTable);
-
-            string[] EquityDividendHistoryFields = { "Dividend Declared Date", "Dividend Ex Date", "Dividend Record Date ", "Dividend Pay Date", "Dividend Amount", "Frequency", "Dividend Type" };
-            DataTable Equity_dividend_history_datatable = dsn.DefaultView.ToTable(false, EquityDividendHistoryFields);
-            WriteToTable(Equity_dividend_history_datatable, "eq.ivp_securityMaster_dividendhistory", EquityDividendHistoryFields, equityHashTable);
+            
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////
             //parsing the bond file and sending it to the database tables//
@@ -280,15 +306,78 @@ namespace ReadFromExcel
             //WriteToTable(Bond_summary_datatable, "cb.ivp_securityMaster_securitysummary", BondSummaryFields, bondHashTable);
 
 
+            string[] bondfields = { "Security Description", "Security Name", "Asset Type", "Investment Type", "Trading Factor", "Pricing Factor",
+                                      "ISIN", "BBG Ticker", "BBG Unique ID", "CUSIP", "SEDOL", 
+                                      "First Coupon Date", "Cap","Floor", "Coupon Frequency", "Coupon", "Coupon Type", "Spread", "Callable Flag", "Fix to Float Flag", "Putable Flag", "Issue Date", "Last Reset Date", "Maturity", "Call Notification Max Days", "Put Notification Max Days", "Penultimate Coupon Date", "Reset Frequency", "Has Position", "Macaulay Duration", "30D Volatility", "90D Volatility", "Convexity", "30Day Average Volume", 
+                                      "PF Asset Class", "PF Country", "PF Credit Rating", "PF Currency", "PF Instrument", "PF Liquidity Profile", "PF Maturity", "PF NAICS Code", "PF Region", "PF Sector", "PF Sub Asset Class",
+                                      "Bloomberg Industry Group", "Bloomberg Industry Sub Group", "Bloomberg Industry Sector", "Country of Issuance", "Issue Currency", "Issuer", "Risk Currency",
+                                      "Put Date", "Put Price",
+                                      "Ask Price", "High Price", "Low Price", "Open Price", "Volume", "Bid Price", "Last Price",
+                                      "Call Date", "Call Price" };
 
+            DataTable equitydt = dsn.DefaultView.ToTable(false, bondfields);
+            //DataColumn sectype = new DataColumn("Security Type", typeof(String));
+            //sectype.DefaultValue = "2";
+            //equitydt.Columns.Add(sectype);
+            //sectype.SetOrdinal(0);
+            //DataColumn created_by = new DataColumn("Created by", typeof(String));
+            //created_by.DefaultValue = "User";
+            //equitydt.Columns.Add(created_by);
 
+            //DataColumn created_on = new DataColumn("Created on", typeof(String));
+            //created_on.DefaultValue = "Today";
+            //equitydt.Columns.Add(created_on);
 
+            //DataColumn last_modified_by = new DataColumn("Last Modified by", typeof(String));
+            //last_modified_by.DefaultValue = "User";
+            //equitydt.Columns.Add(last_modified_by);
+
+            //DataColumn last_modified_on = new DataColumn("Last Modified On", typeof(String));
+            //last_modified_on.DefaultValue = "Today";
+            //equitydt.Columns.Add(last_modified_on);
+
+            //DataColumn is_active = new DataColumn("Is Active", typeof(String));
+            //is_active.DefaultValue = "TRUE";
+            //equitydt.Columns.Add(is_active);
+
+            //foreach (string f in bondfields)
+            //    Debug.WriteLine(bondHashTable[f.ToString()].ToString());
+
+            using (SqlConnection conn = new SqlConnection(DestinationConnectionString))
+            {
+                conn.Open();
+                using (SqlBulkCopy sbc = new SqlBulkCopy(conn))
+                {
+                    sbc.DestinationTableName = "dbo.ivp_secm_bond";
+                    try
+                    {
+                        //sbc.ColumnMappings.Add("Created by", "created_by");
+                        //sbc.ColumnMappings.Add("Created on", "created_on");
+                        //sbc.ColumnMappings.Add("Last Modified by", "last_modified_by");
+                        //sbc.ColumnMappings.Add("Last Modified On", "last_modified_on");
+                        //sbc.ColumnMappings.Add("Is Active", "is_active");
+
+                        foreach (string f in bondfields)
+                            sbc.ColumnMappings.Add(f.ToString(), bondHashTable[f.ToString()].ToString());
+
+                        sbc.WriteToServer(equitydt);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+            }
 
                
         }
 
         
-        private void WriteToTable(DataTable source_datatable, string destination_table_name, string[] fields, Hashtable SecurityHashTable)
+        public void WriteToTable(DataTable source_datatable, string destination_table_name, string[] fields, Hashtable SecurityHashTable)
         {
             using (SqlConnection conn = new SqlConnection(DestinationConnectionString))
             {
@@ -298,10 +387,10 @@ namespace ReadFromExcel
                     sbc.DestinationTableName = destination_table_name;
                     try
                     {
-                        if (destination_table_name == "core.ivp_securityMaster_core_securityidentifier" || destination_table_name == "core.ivp_securityMaster_core_referencedata") sbc.ColumnMappings.Add("Security Type", "sectype");
-                        if (destination_table_name == "cb.ivp_securityMaster_securitysummary") sbc.ColumnMappings.Add("Is Active","is_active");
+                        
                         foreach(string f in fields)
                         sbc.ColumnMappings.Add(f.ToString(), SecurityHashTable[f.ToString()].ToString());                                                
+
                         sbc.WriteToServer(source_datatable);
                     }
                     catch (Exception ex)
@@ -318,8 +407,8 @@ namespace ReadFromExcel
 
         protected int CountSecurities()
         {
-            //string connectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
-            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
+            string connectionString = @"Data Source=192.168.0.63\DEV05H;Initial Catalog=MCA2015;User ID=mca2015;Password=ivp@123;";
+            //string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Ashu\Documents\SecMasterDB.mdf;Integrated Security=True;Connect Timeout=30;";
 
             SqlConnection conn = new SqlConnection(connectionString);
             int noOfSecuritiesNow = 0;
